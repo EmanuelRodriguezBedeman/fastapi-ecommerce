@@ -29,7 +29,7 @@ class Order(Base):
     id = Column(Integer, primary_key=True, index=True)
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     total_amount = Column(Float, nullable=False)
-    status = Column(Enum(OrderStatus), default=OrderStatus.PENDING)
+    status = Column(String(50), nullable=False, default="pending")
     shipping_address = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
