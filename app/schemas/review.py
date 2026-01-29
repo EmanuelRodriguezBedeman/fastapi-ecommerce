@@ -16,17 +16,6 @@ class ReviewBase(BaseModel):
     comment: Optional[str] = None
 
 
-class ReviewCreate(ReviewBase):
-    """Schema for creating a review"""
-    pass
-
-
-class ReviewUpdate(BaseModel):
-    """Schema for updating a review"""
-    rating: Optional[int] = None
-    comment: Optional[str] = None
-
-
 class ReviewResponse(ReviewBase):
     """Schema for review response"""
     id: int
