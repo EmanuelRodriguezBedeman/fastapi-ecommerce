@@ -10,22 +10,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
-    # services:
-    #   postgres:
-    #     image: postgres:15
-    #     env:
-    #       POSTGRES_PASSWORD: {{ secrets.POSTGRES_PASSWORD }}
-    #       POSTGRES_DB: {{ secrets.POSTGRES_DB }}
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 5
-    #     ports:
-    #       - 5432:5432
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: ecommerce_test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -38,21 +39,16 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
     
-    # - name: Run linting
-    #   run: |
-    #     ruff check app/ tests/
-    #     ruff format --check app/ tests/
+    - name: Run Ruff (Linting & Formatting)
+      run: |
+        ruff check .
+        ruff format --check .
 
-    # - name: Run formatting
-    #   run: |
-    #     ruff format --check app/ tests/
-
-    - name: Run unittests
+    - name: Run Pytest (Unit Tests)
+      env:
+        # We point the tests to the temporary Postgres service defined above
+        DATABASE_URL: postgresql://postgres:password@localhost:5432/ecommerce_test_db
+        SECRET_KEY: test-secret-key-for-ci
+        DEBUG: False
       run: |
         pytest tests/ -v
-    
-    # - name: Run tests
-    #   env:
-    #     DATABASE_URL: postgresql://postgres:{{ secrets.POSTGRES_PASSWORD }}@localhost:5432/{{ secrets.POSTGRES_DB }}
-    #   run: |
-    #     pytest tests/ -v

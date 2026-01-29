@@ -2,7 +2,7 @@
 FastAPI E-commerce Main Application
 """
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.routers import customers, orders, products, reviews
@@ -41,8 +41,11 @@ async def check_db_health(db: Session = Depends(get_db)):
             "database": "connected"
         }
     except Exception as e:
-        return {
-            "status": "unhealthy",
-            "database": "disconnected",
-            "error": str(e)
-        }
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail = {
+                "status": "unhealthy",
+                "database": "disconnected",
+                "error": str(e)
+            }
+        )
