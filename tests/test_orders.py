@@ -12,7 +12,7 @@ def test_get_orders():
     with TestClient(app) as client:
 
         # Request to the endpoint
-        response = client.get("/api/v1/orders/")
+        response = client.get("orders/")
 
         # Asserts that the response status code is 200
         assert response.status_code == 200
@@ -24,7 +24,7 @@ def test_get_order():
     with TestClient(app) as client:
 
         # Request to the endpoint
-        response = client.get("/api/v1/orders/1")
+        response = client.get("orders/500")
 
         # Asserts that the response status code is 200
         assert response.status_code == 200
