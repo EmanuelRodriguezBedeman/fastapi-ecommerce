@@ -2,10 +2,12 @@
 FastAPI E-commerce Main Application
 """
 
-from fastapi import FastAPI
-
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.routers import customers, orders, products, reviews
 from app.config import settings
+from app.utils.dependencies import get_db
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -26,7 +28,21 @@ async def root():
     return {"message": f"Welcome to {settings.PROJECT_NAME}"}
 
 
-@app.get("/health")
-async def health_check():
-    """Health check endpoint"""
-    return {"status": "healthy"}
+@app.get("/health", tags=["Health Check"])
+async def check_db_health(db: Session = Depends(get_db)):
+    """
+    Health check endpoint that verifies database connectivity.
+    """
+    try:
+        # We use db.execute(text("SELECT 1")) to check if the DB is responding
+        db.execute(text("SELECT 1"))
+        return {
+            "status": "healthy",
+            "database": "connected"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "database": "disconnected",
+            "error": str(e)
+        }
