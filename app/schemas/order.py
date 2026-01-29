@@ -15,18 +15,6 @@ class OrderBase(BaseModel):
     shipping_address: str
 
 
-class OrderCreate(OrderBase):
-    """Schema for creating an order"""
-    customer_id: int
-    total_amount: float
-
-
-class OrderUpdate(BaseModel):
-    """Schema for updating an order"""
-    status: Optional[OrderStatus] = None
-    shipping_address: Optional[str] = None
-
-
 class OrderResponse(OrderBase):
     """Schema for order response"""
     id: int
