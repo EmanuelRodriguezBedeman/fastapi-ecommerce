@@ -48,6 +48,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+.ruff_cache/
 
 # Translations
 *.mo
@@ -136,3 +137,6 @@ Thumbs.db
 # Project specific
 *.db
 *.sqlite
+
+# Playground
+scripts/

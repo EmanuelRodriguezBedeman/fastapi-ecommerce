@@ -1,29 +1,34 @@
-# """
-# Tests for order endpoints
-# """
+"""
+Tests for order endpoints
+"""
 
-# from fastapi.testclient import TestClient
-# from app.main import app
+from fastapi.testclient import TestClient
 
-# client = TestClient(app)
-
-
-# def test_get_orders():
-#     """Test getting all orders"""
-#     response = client.get("/api/v1/orders/")
-#     assert response.status_code in [200, 404]
+from app.main import app
 
 
-# def test_get_order():
-#     """Test getting a specific order"""
-#     response = client.get("/api/v1/orders/1")
-#     assert response.status_code in [200, 404]
+def test_get_orders():
+    """Test getting all orders"""
+
+    with TestClient(app) as client:
+        # Request to the endpoint
+        response = client.get("orders/")
+
+        # Asserts that the response status code is 200
+        assert response.status_code == 200
 
 
-# def test_create_order():
-#     """Test creating an order"""
-#     order_data = {
-#         "shipping_address": "123 Test St, Test City, 12345"
-#     }
-#     response = client.post("/api/v1/orders/", json=order_data)
-#     assert response.status_code in [201, 400, 422]
+def test_get_order():
+    """Test getting a specific order"""
+
+    with TestClient(app) as client:
+        # First, get the list to find a valid ID
+        list_response = client.get("/orders")
+        orders = list_response.json()
+
+        if orders:
+            order_id = orders[0]["id"]
+            response = client.get(f"/orders/{order_id}")
+            assert response.status_code == 200
+        else:
+            print("No orders found to test individual GET")

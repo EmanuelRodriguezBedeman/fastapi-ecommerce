@@ -2,6 +2,6 @@
 API routers
 """
 
-from app.routers import users, products, orders
+from app.routers import customers, orders, products, reviews
 
-__all__ = ["users", "products", "orders"]
+__all__ = ["customers", "products", "orders", "reviews"]
