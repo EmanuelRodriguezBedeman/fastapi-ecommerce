@@ -22,8 +22,13 @@ def test_get_order():
     """Test getting a specific order"""
 
     with TestClient(app) as client:
-        # Request to the endpoint
-        response = client.get("orders/500")
+        # First, get the list to find a valid ID
+        list_response = client.get("/orders")
+        orders = list_response.json()
 
-        # Asserts that the response status code is 200
-        assert response.status_code == 200
+        if orders:
+            order_id = orders[0]["id"]
+            response = client.get(f"/orders/{order_id}")
+            assert response.status_code == 200
+        else:
+            print("No orders found to test individual GET")

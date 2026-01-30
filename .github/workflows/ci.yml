@@ -10,21 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: ecommerce_test_db
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    
     steps:
     - uses: actions/checkout@v4
     
@@ -41,14 +26,14 @@ jobs:
     
     - name: Run Ruff (Linting & Formatting)
       run: |
-        ruff check .
-        ruff format --check .
+        python -m ruff check .
+        python -m ruff format --check .
 
-    - name: Run Pytest (Unit Tests)
+    - name: Run Pytest (Integration Tests against Neon)
       env:
-        # We point the tests to the temporary Postgres service defined above
-        DATABASE_URL: postgresql://postgres:password@localhost:5432/ecommerce_test_db
-        SECRET_KEY: test-secret-key-for-ci
+        # This pulled from your GitHub Repo Secrets
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DEBUG: False
       run: |
         pytest tests/ -v

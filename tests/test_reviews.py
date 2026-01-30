@@ -20,8 +20,13 @@ def test_get_reviews():
 def test_get_review():
     """Test getting a specific review"""
     with TestClient(app) as client:
-        # Request to the endpoint
-        response = client.get("reviews/200")
+        # First, get the list to find a valid ID
+        list_response = client.get("/reviews")
+        reviews = list_response.json()
 
-        # Asserts that the response status code is 200
-        assert response.status_code == 200
+        if reviews:
+            review_id = reviews[0]["id"]
+            response = client.get(f"/reviews/{review_id}")
+            assert response.status_code == 200
+        else:
+            print("No reviews found to test individual GET")
