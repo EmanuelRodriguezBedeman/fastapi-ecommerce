@@ -2,18 +2,16 @@
 Pydantic schemas for request/response validation
 """
 
-from app.schemas.order import OrderCreate, OrderResponse, OrderUpdate
-from app.schemas.product import ProductCreate, ProductResponse, ProductUpdate
-from app.schemas.user import UserCreate, UserResponse, UserUpdate
+from app.schemas.customer import CustomerResponse
+from app.schemas.order import OrderResponse
+from app.schemas.order_item import OrderItemResponse
+from app.schemas.product import ProductResponse
+from app.schemas.review import ReviewResponse
 
 __all__ = [
-    "UserCreate",
-    "UserUpdate",
-    "UserResponse",
-    "ProductCreate",
-    "ProductUpdate",
+    "CustomerResponse",
     "ProductResponse",
-    "OrderCreate",
-    "OrderUpdate",
     "OrderResponse",
+    "ReviewResponse",
+    "OrderItemResponse",
 ]
