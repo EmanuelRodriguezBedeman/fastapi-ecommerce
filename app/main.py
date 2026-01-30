@@ -9,11 +9,13 @@ from app.routers import customers, orders, products, reviews, order_items
 from app.config import settings
 from app.utils.dependencies import get_db
 
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description=f"A modern analytics API built with {settings.PROJECT_NAME}",
     version="0.1.0",
 )
+
 
 # Include routers
 app.include_router(customers.router, prefix="/customers", tags=["customers"])
